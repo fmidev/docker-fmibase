@@ -8,9 +8,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh '''ls -la
-./build.sh
-'''
+            sh './build.sh'
 	}
     }
     stage('Test preparation') {
@@ -24,7 +22,6 @@ pipeline {
           image 'fmibase'
           args '-v ${PWD}/tmp-yum-cache:/var/cache/yum -v ${PWD}:/work -w /work'
         }
-
       }
       steps {
         sh './test-inside-container-1.sh'
@@ -43,7 +40,8 @@ pipeline {
     }
     stage('Cleanup') {
       steps {
-        sh 'rm -rfv tmp-yum-cache'
+        sh 'rm -rf tmp-yum-cache'
+      }
     }
   }
 }
