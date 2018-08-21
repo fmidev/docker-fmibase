@@ -9,10 +9,16 @@ FROM centos:latest
 RUN sed -i -e 's/keepcache=0//' /etc/yum.conf && \
     echo keepcache=1 >> /etc/yum.conf
 
+# Add EPEL repository and lock certain versions
+RUN \
+ yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+ yum -y install yum-plugin-versionlock
+
+COPY versionlock.list /etc/yum/pluginconf.d/versionlock.list
+
 # Install some and delete cache
 RUN \
  yum -y install https://download.fmi.fi/smartmet-open/rhel/7/x86_64/smartmet-open-release-17.9.28-1.el7.fmi.noarch.rpm && \
- yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
  yum -y install https://download.fmi.fi/fmiforge/rhel/7/x86_64/fmiforge-release-17.9.28-1.el7.fmi.noarch.rpm && \
  yum -y install https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm && \
  yum -y update && \
